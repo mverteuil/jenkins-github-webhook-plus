@@ -13,13 +13,17 @@ app = Flask(__name__)
 events = router.EventRouter()
 
 
+def get_build_url(event_data):
+    target_branch_name = event_data['pull_request']['head']['ref']
+    repository_name = event_data['repository']['name']
+    url_formatter = '{jenkins_url}/job/{repository_name}-{target_branch_name}/build'.format
+    return url_formatter(jenkins_url=JENKINS_URL, repository_name=repository_name, target_branch_name=target_branch_name)
+
+
 @events.register_event('pull_request', repository='*')
 def pull_request_handler(event_type, event_data):
     if event_data['action'] != 'closed':
-        target_branch_name = event_data['pull_request']['head']['ref']
-        repository_name = event_data['repository']['name']
-        url_formatter = '{jenkins_url}/job/{repository_name}-{target_branch_name}/build'.format
-        url = url_formatter(jenkins_url=JENKINS_URL, repository_name=repository_name, target_branch_name=target_branch_name)
+        url = get_build_url(event_data)
         requests.get(url)
 
 
