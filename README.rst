@@ -6,10 +6,10 @@ Proxy Service for Sidelaunching Jenkins Tasks on GitHub Events
 Usage
 -----
 
-```bash
-export JENKINS_URL=http://mylocaljenkins:8080;
-python jghwhp
-```
+::
+
+    export JENKINS_URL=http://mylocaljenkins:8080;
+    python jghwhp
 
 Authors
 -------
