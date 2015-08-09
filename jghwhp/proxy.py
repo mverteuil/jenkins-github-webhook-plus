@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -26,6 +27,6 @@ def pull_request_handler(event_type, event_data):
 
 @app.route('/github-webhook/', methods=['POST'])
 def request_proxy():
-    response = requests.post(JENKINS_WEBHOOK_URL, data=request.json, headers=request.headers)
+    response = requests.post(JENKINS_WEBHOOK_URL, data=request.data, headers=request.headers)
     events.trigger_event_handlers(request.headers['X-GitHub-Event'], request.json)
     return response.content
