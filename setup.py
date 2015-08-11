@@ -24,7 +24,7 @@ class PyTest(TestCommand):
 
 setuptools.setup(
     name="jenkins-github-webhook-plus",
-    version="0.1.0",
+    version="0.1.2",
     url="https://github.com/mverteuil/jenkins-github-webhook-plus",
 
     author="M. de Verteuil",
@@ -41,6 +41,7 @@ setuptools.setup(
 
     entry_points={
         'console_scripts': [
+            'jghwhp = jghwhp.__main__',
             'run-jghwhp = jghwhp.__main__'
         ]
     },
