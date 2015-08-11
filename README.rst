@@ -7,7 +7,14 @@ Usage
 -----
 
 ::
+    python setup.py install
+    export JENKINS_URL=http://mylocaljenkins:8080;
+    run-jghwhp
 
+or
+
+::
+    python setup.py install
     export JENKINS_URL=http://mylocaljenkins:8080;
     python jghwhp
 

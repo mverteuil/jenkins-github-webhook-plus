@@ -39,6 +39,12 @@ setuptools.setup(
     tests_require=['pytest'],
     cmdclass={'test': PyTest},
 
+    entry_points={
+        'console_scripts': [
+            'run-jghwhp = jghwhp.__main__'
+        ]
+    },
+
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Programming Language :: Python',
