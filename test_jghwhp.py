@@ -63,5 +63,5 @@ class TestPullRequestEvents(object):
             repository_name=self.event_data['repository']['name'],
             target_branch_name=self.event_data['pull_request']['head']['ref'],
         )
-        actual_url = proxy.get_build_url(self.event_data)
+        actual_url = proxy.generate_build_url(self.event_data)
         assert expected_url == actual_url
