@@ -32,6 +32,18 @@ events = router.EventRouter()
 RequestSignature = namedtuple('RequestDigest', 'algorithm digest')
 
 
+def compare_digest(a, b):
+    """
+    Return a == b.
+
+    If python > 2.7.7, uses hmac.compare_digest, otherwise uses `==` comparison.
+    """
+    if hasattr(hmac, 'compare_digest'):
+        return hmac.compare_digest(a, b)
+    else:
+        return a == b
+
+
 def with_hmac_verification(app_route):
     """ Decorates app routes with HMAC verification against the configuration secret. """
     @functools.wraps(app_route)
@@ -40,7 +52,7 @@ def with_hmac_verification(app_route):
             header_bytes = bytes(request.headers[SIGNATURE_HEADER])
             signature = RequestSignature(*header_bytes.split('='))
             verification = hmac.new(SECRET, request.data, getattr(hashlib, signature.algorithm))
-            assert hmac.compare_digest(signature.digest, verification.hexdigest())
+            assert compare_digest(signature.digest, verification.hexdigest())
         return app_route()
     return wrapper
 
