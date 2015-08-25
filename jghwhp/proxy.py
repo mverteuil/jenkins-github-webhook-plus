@@ -36,7 +36,7 @@ def with_hmac_verification(app_route):
     """ Decorates app routes with HMAC verification against the configuration secret. """
     @functools.wraps(app_route)
     def wrapper():
-        if SIGNATURE_HEADER in request.headers:
+        if SECRET is not None:
             header_bytes = bytes(request.headers[SIGNATURE_HEADER])
             signature = RequestSignature(*header_bytes.split('='))
             verification = hmac.new(SECRET, request.data, getattr(hashlib, signature.algorithm))
