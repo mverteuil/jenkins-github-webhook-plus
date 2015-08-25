@@ -60,7 +60,7 @@ def pull_request_handler(event_type, event_data):
         requests.get(url)
 
 
-@app.route('/github-webhook/', methods=['POST'])
+@app.route('/webhook/', methods=['POST'])
 @with_hmac_verification
 def request_proxy():
     response = requests.post(JENKINS_WEBHOOK_URL, data=request.data, headers=request.headers)

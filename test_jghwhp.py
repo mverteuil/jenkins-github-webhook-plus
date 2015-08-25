@@ -21,7 +21,7 @@ class TestPullRequestEvents(object):
         patched_requests.post.return_value = response
         with proxy.app.test_client() as client:
             self.event_data['action'] = 'closed'
-            response = client.post('/github-webhook/',
+            response = client.post('/webhook/',
                                    headers={'X-GitHub-Event': 'pull_request',
                                             'Content-Type': 'application/json'},
                                    data=json.dumps(self.event_data))
@@ -35,7 +35,7 @@ class TestPullRequestEvents(object):
         patched_requests.post.return_value = response
         with proxy.app.test_client() as client:
             self.event_data['action'] = 'opened'
-            response = client.post('/github-webhook/',
+            response = client.post('/webhook/',
                                    headers={'X-GitHub-Event': 'pull_request',
                                             'Content-Type': 'application/json'},
                                    data=json.dumps(self.event_data))
@@ -49,7 +49,7 @@ class TestPullRequestEvents(object):
         patched_requests.post.return_value = response
         with proxy.app.test_client() as client:
             self.event_data['action'] = 'reopened'
-            response = client.post('/github-webhook/',
+            response = client.post('/webhook/',
                                    headers={'X-GitHub-Event': 'pull_request',
                                             'Content-Type': 'application/json'},
                                    data=json.dumps(self.event_data))
