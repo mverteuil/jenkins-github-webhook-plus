@@ -1,3 +1,4 @@
+import httplib
 from collections import namedtuple
 import functools
 import hashlib
@@ -57,19 +58,27 @@ def with_hmac_verification(app_route):
     return wrapper
 
 
-def generate_build_url(event_data):
+def generate_build_url(event_data, parameterized_build=False):
     """ Generates the build action URL for the supplied event. """
     target_branch_name = event_data['pull_request']['head']['ref']
     repository_name = event_data['repository']['name']
-    url_formatter = '{jenkins_url}/job/{repository_name}-{target_branch_name}/build'.format
-    return url_formatter(jenkins_url=JENKINS_URL, repository_name=repository_name, target_branch_name=target_branch_name)
+    url_formatter = '{jenkins_url}/job/{repository_name}-{target_branch_name}/build{build_suffix}'.format
+    return url_formatter(jenkins_url=JENKINS_URL,
+                         repository_name=repository_name,
+                         target_branch_name=target_branch_name,
+                         build_suffix='WithParameters' if parameterized_build else '')
 
 
 @events.register_event('pull_request', repository='*')
 def pull_request_handler(event_type, event_data):
     if event_data['action'] != 'closed':
         url = generate_build_url(event_data)
-        requests.get(url)
+        # Attempt normal build request
+        response = requests.post(url)
+        # Attempt parameterized build request if normal build request fails
+        if response.status_code is not httplib.OK:
+            url = generate_build_url(event_data, parameterized_build=True)
+            requests.post(url)
 
 
 @app.route('/webhook/', methods=['POST'])
